@@ -233,13 +233,13 @@ class Media_Command extends WP_CLI_Command {
 		$wud = wp_upload_dir();
 
 		$metadata = wp_get_attachment_metadata( $att_id );
+		
+		if ( !is_array($metadata) || !array_key_exists('sizes', $metadata) || empty($metadata['sizes'])) {
+			return;
+		}
 
 		$dir_path = $wud['basedir'] . '/' . dirname( $metadata['file'] ) . '/';
 		$original_path = $dir_path . basename( $metadata['file'] );
-
-		if ( empty( $metadata['sizes'] ) ) {
-			return;
-		}
 
 		foreach ( $metadata['sizes'] as $size_info ) {
 			$intermediate_path = $dir_path . $size_info['file'];
